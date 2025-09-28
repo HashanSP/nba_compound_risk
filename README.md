@@ -1,7 +1,7 @@
 # Introduction
 
 This repository is intended as an online supplement to the abstract:
-
+Modeling Player Injuries in the National Basketball Association: An Actuarial Approach
 
 This repository includes:
 
