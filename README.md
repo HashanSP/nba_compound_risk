@@ -1,1 +1,3 @@
-# nba_compound_risk
+# Introduction
+
+This repository is intended as an online supplement to the abstract:
