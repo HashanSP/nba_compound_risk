@@ -22,7 +22,6 @@
 # packages and helpers
 # ------------------------------------------------------------
 
-require(car)        #analysis
 require(dplyr)      #analysis
 require(MASS)       #analysis
 require(tidyr)      #analysis
@@ -30,6 +29,7 @@ require(ggplot2)    #figures
 require(scales)     #figures
 require(knitr)      #latex table
 require(kableExtra) #latex table
+require(extrafont)  #font_import() first time for 'Times New Roman'
 
 # functions used throughout -------------------------
 source('./code/make_severity_plot.R')
@@ -523,8 +523,8 @@ tnr_theme <- theme(
   strip.text        = element_text(size = 9, family = "Times New Roman")
 )
 
-p1 <- p1 + tnr_theme
-p2 <- p2 + tnr_theme
+p1 <- p1 + theme_bw() + tnr_theme
+p2 <- p2 + theme_bw() + tnr_theme
 
 # show them---------------- 
 print(p1)
