@@ -490,7 +490,7 @@ colnames(pred_df_out) <- c("Player", "Injuries", "Avg. missed games", "Comp. mis
 
 # which models go in each frame ---------------- 
 group1 <- c("Injuries","Avg. missed games","Comp. missed games")
-group2 <- c("Compound financial loss", "Avg. cost per game")
+group2 <- c("Avg. cost per game", "Compound financial loss")
 
 # build the two frames using helper function---------------- 
 p1 <- make_severity_plot(pred_df_out, group1, ncol = 3)  # E_I, E_M, E_S in one frame
@@ -529,3 +529,4 @@ p2 <- p2 + theme_bw() + tnr_theme
 # show them---------------- 
 print(p1)
 print(p2)
+
