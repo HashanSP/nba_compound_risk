@@ -510,7 +510,7 @@ p2 <- p2 +
   labs(y = "Expected Values (Millions)")
 
 # replace the title p2---------------- 
-p2 <- p2 + labs(title = "Expected Financial Losses by Player Position")
+p2 <- p2 + labs(title = "Distribution of Expected Financial Losses by Player Position")
 
 # Use Times New Roman for both plots---------------- 
 tnr_theme <- theme(
@@ -529,4 +529,5 @@ p2 <- p2 + theme_bw() + tnr_theme
 # show them---------------- 
 print(p1)
 print(p2)
+
 
