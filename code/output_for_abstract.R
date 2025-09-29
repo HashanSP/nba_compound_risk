@@ -484,13 +484,13 @@ latex_code
 
 # figure 1 --------------------------------------------------------
 # update column names
-colnames(pred_df_out) <- c("Player", "Injuries", "Avg. missed games", "Comp. missed games", "Avg. cost per game", "Compound financial loss",
+colnames(pred_df_out) <- c("Player", "Number of Injuries", "Missed Games Per Injury", "Aggregate Loss (Games)", "Value Per Game ($)", "Aggregate Loss ($)",
                            "Games count", "Age", "Position", "Act. Injuries", "Act. missed games", "Games played",
                            "Avg. % MINs", "Salary claimed", "Salary", "Avg. missed games")
 
 # which models go in each frame ---------------- 
-group1 <- c("Injuries","Avg. missed games","Comp. missed games")
-group2 <- c("Avg. cost per game", "Compound financial loss")
+group1 <- c("Number of Injuries","Missed Games Per Injury","Aggregate Loss (Games)")
+group2 <- c("Value Per Game ($)", "Aggregate Loss ($)")
 
 # build the two frames using helper function---------------- 
 p1 <- make_severity_plot(pred_df_out, group1, ncol = 3)  # E_I, E_M, E_S in one frame
