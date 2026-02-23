@@ -33,6 +33,7 @@ require(extrafont)  #font_import() first time for 'Times New Roman'
 require(purr)       #for CV settings
 require(scales)     #for scaling figure axis
 require(ggimage)    #Enables adding images to ggplot
+require(cowplot)    #for 2 in one plot
 
 # functions used throughout -------------------------
 source('./code/make_severity_plot.R')
@@ -105,7 +106,18 @@ player_box_sum <- master_df %>%
 # figure 1
 # ------------------------------------------------------------
 
-ggplot(team_injury_summary %>% 
+# Use Times New Roman for both plots---------------- 
+tnr_theme <- theme(
+  text              = element_text(family = "Times New Roman"),
+  axis.title.x      = element_text(size = 9, family = "Times New Roman"),
+  axis.title.y      = element_text(size = 9, family = "Times New Roman"),
+  axis.text.x       = element_text(size = 9, family = "Times New Roman"),
+  axis.text.y       = element_text(size = 9, family = "Times New Roman"),
+  legend.text       = element_text(size = 9, family = "Times New Roman"),
+  strip.text        = element_text(size = 9, family = "Times New Roman")
+)
+
+pp <- ggplot(team_injury_summary %>% 
     mutate(TEAM_ABBREVIATION = reorder(TEAM_ABBREVIATION, total_travel)),
   aes(x = TEAM_ABBREVIATION, y = total_travel)
 ) +
@@ -117,30 +129,79 @@ ggplot(team_injury_summary %>%
     axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)
   )
 
+pp <- pp + tnr_theme
+
+ggsave(
+  filename = "figure1.png",  # or "figure4.pdf"
+  plot     = pp,
+  width    = 6,              # inches
+  height   = 4,              # inches
+  units    = "in",
+  dpi      = 300             # for PNG/JPG; ignore for PDF/SVG
+)
+
 # ------------------------------------------------------------
 # figure 2
 # ------------------------------------------------------------
 
-ggplot(injury_travel_summary, 
-       aes(y = played_games_72h, x = total_travel, size=injuries,color =  avg_perc_min)) +
+pp <- ggplot(injury_travel_summary,
+       aes(x = total_travel, y = played_games_72h, size = injuries, color = avg_perc_min)) +
   geom_point() +
-  scale_color_gradient(low = "green", high = "red") +
+  scale_color_gradient(
+    name   = "Average min. %",
+    low    = "green",
+    high   = "red",
+    labels = percent_format(accuracy = 1)  # 0.73 -> 73%
+  ) +
+  scale_size(name = "Injuries") +
+  scale_x_continuous(labels = comma) +
   labs(
-    title = "Injuries and Played Minutes by Average Games Played within 72h vs. Total Travel",
     x = "Total Travel",
     y = "Average Games Played within 72h"
   ) +
   theme_minimal()
 
+white_bg <- theme_bw(base_size = 11, base_family = "Times New Roman") +
+  theme(
+    plot.background  = element_rect(fill = "white", colour = NA),
+    panel.background = element_rect(fill = "white", colour = NA),
+    legend.background = element_rect(fill = "white", colour = NA),
+    legend.key       = element_rect(fill = "white", colour = NA)
+  )
+
+pp <- pp + white_bg #tnr #tnr_theme
+
+ggsave(
+  filename = "figure2.png",  # or "figure4.pdf"
+  plot     = pp,
+  width    = 6,              # inches
+  height   = 4,              # inches
+  units    = "in",
+  dpi      = 300             # for PNG/JPG; ignore for PDF/SVG
+)
+
+# ggplot(injury_travel_summary, 
+#        aes(y = played_games_72h, x = total_travel, size=injuries,color =  avg_perc_min)) +
+#   geom_point() +
+#   scale_color_gradient(low = "green", high = "red") +
+#   labs(
+#     title = "Injuries and Played Minutes by Average Games Played within 72h vs. Total Travel",
+#     x = "Total Travel",
+#     y = "Average Games Played within 72h"
+#   ) +
+#   theme_minimal()
+
+# ------------------------------------------------------------
 # figure 3
-ggplot(team_injury_summary, 
+# ------------------------------------------------------------
+pp <- ggplot(team_injury_summary, 
        aes(x = player_games_lost, y = salary_dollars_lost)) +
   # A square "background" with color driven by the number_of_injuries
   geom_point(aes(color = injuries),
-             size = 25,       # overall square size
+             size = 18,       # overall square size
              shape = 22,      # square with an outline (stroke)
              fill = "white",  # fill color for the square
-             stroke = 2       # thickness of the outline
+             stroke = 1       # thickness of the outline
   ) +
   # The team logos plotted on top
   geom_image(aes(image = team_logo),
@@ -151,31 +212,81 @@ ggplot(team_injury_summary,
     labels = function(x) paste0(x / 1e6, "M")
   )+
   labs(
-    title = "Teams by Player Games Lost vs. Salary Dollars Lost",
+    #title = "Teams by Player Games Lost vs. Salary Dollars Lost",
     x = "Player Games Lost",
     y = "Salary Dollars Lost",
     color = "Injuries"  # legend title
   ) +
   theme_minimal()
 
-# figure 4
-ggplot(team_injury_summary, 
-       aes(x = player_games_lost, y = w_percentage)) +  # Remove color
-  geom_point(aes(color = injuries),
-             size = 25,       # overall square size
-             shape = 22,      # square with an outline (stroke)
-             fill = "white",  # fill color for the square
-             stroke = 2       # thickness of the outline
-  ) +
-  geom_image(aes(image = team_logo), size = 0.1) +  # Adjust size of logos
-  scale_color_gradient(low = "green", high = "red") +
-  labs(
-    title = "Teams by player games lost vs. win percentage",
-    y = "Win Percentage",
-    x = "Player Games Lost",
-    color = "Injuries"
-  ) + theme_minimal()
+pp <- pp + white_bg
 
+ggsave(
+  filename = "figure3.png",  # or "figure4.pdf"
+  plot     = pp,
+  width    = 6,              # inches
+  height   = 4,              # inches
+  units    = "in",
+  dpi      = 300             # for PNG/JPG; ignore for PDF/SVG
+)
+
+# ------------------------------------------------------------
+# figure 4
+# ------------------------------------------------------------
+# ggplot(team_injury_summary, 
+#        aes(x = player_games_lost, y = w_percentage)) +  # Remove color
+#   geom_point(aes(color = injuries),
+#              size = 25,       # overall square size
+#              shape = 22,      # square with an outline (stroke)
+#              fill = "white",  # fill color for the square
+#              stroke = 2       # thickness of the outline
+#   ) +
+#   geom_image(aes(image = team_logo), size = 0.1) +  # Adjust size of logos
+#   scale_color_gradient(low = "green", high = "red") +
+#   labs(
+#     title = "Teams by player games lost vs. win percentage",
+#     y = "Win Percentage",
+#     x = "Player Games Lost",
+#     color = "Injuries"
+#   ) + theme_minimal()
+
+pp <- ggplot(team_injury_summary, aes(x = player_games_lost, y = w_percentage)) +
+  # square backdrop coded by injuries
+  geom_point(
+    aes(color = injuries),
+    size   = 18,     # square size
+    shape  = 22,     # filled square with border
+    fill   = "white",
+    stroke = 1
+  ) +
+  # team logo on top
+  geom_image(aes(image = team_logo), size = 0.09, asp = 1) +
+  # color bar for injuries
+  scale_color_gradient(
+    name = "Injuries",
+    low  = "green",
+    high = "red"
+  ) +
+  # nice axis formatting
+  scale_y_continuous(name = "Win Percentage", labels = percent_format(accuracy = 1)) +
+  scale_x_continuous(name = "Player Games Lost", labels = comma) +
+  guides(color = guide_colorbar(title.position = "top")) +
+  theme_minimal(base_size = 11) +
+  theme(
+    panel.grid.minor = element_blank(),
+    legend.position  = "right"
+  )
+
+pp <- pp + white_bg
+
+ggsave(
+  filename = "figure4.png",  # or "figure4.pdf"
+  plot     = pp,
+  width    = 6,              # inches
+  height   = 4,              # inches
+  units    = "in",
+  dpi      = 300             # for PNG/JPG; ignore for PDF/SVG
+) 
 
 # We want both in one table, so we can join: ---------------------------------------------
 model_data_sum <- injury_travel_summary %>%
@@ -565,8 +676,9 @@ latex_code <-
 # paste this code in latex to get the table 1. (note: edit Avg. % MINs as Avg. \% MINs)
 latex_code
 
-
-# figure 5 --------------------------------------------------------
+# ------------------------------------------------------------
+# figure 5 
+# ------------------------------------------------------------
 # update column names
 colnames(pred_df_out) <- c("Player", "Number of Injuries", "Missed Games Per Injury", "Aggregate Loss (Games)", "Value Per Game ($)", "Aggregate Loss ($)",
                            "Games count", "Age", "Position", "Act. Injuries", "Act. missed games", "Games played",
@@ -594,7 +706,9 @@ p2 <- p2 +
   labs(y = "Expected Values (Millions)")
 
 # replace the title p2---------------- 
-p2 <- p2 + labs(title = "Distribution of Expected Financial Losses by Player Position")
+# p2 <- p2 + labs(title = "Distribution of Expected Financial Losses by Player Position")
+p1 <- p1 + labs(title = "")
+p2 <- p2 + labs(title = "")
 
 # Use Times New Roman for both plots---------------- 
 tnr_theme <- theme(
@@ -613,6 +727,32 @@ p2 <- p2 + theme_bw() + tnr_theme
 # show them---------------- 
 print(p1)
 print(p2)
+
+# Side-by-side layout (A = p1, B = p2)
+combined_p12 <- plot_grid(
+  p1, p2,
+  #labels     = c("A", "B"),  # remove if you don't want panel tags
+  label_size = 12,
+  ncol       = 2,
+  align      = "h",
+  axis       = "tb",         # keep top/bottom axes aligned
+  rel_widths = c(1, 1)       # tweak if one panel should be wider
+)
+
+# Show it
+print(combined_p12)
+
+# Save at 12" x 4" (each panel ~6" x 4")
+# ggsave(
+#   filename = "figure5_combined.pdf",  # or .png
+#   plot     = combined_p12,
+#   width    = 12,
+#   height   = 4,
+#   units    = "in",
+#   dpi      = 300
+# )
+
+ggsave("figure5_combined.pdf", combined_p12, width = 12, height = 4, device = cairo_pdf, bg = "white")
 
 ########################################################
 #OOF setting
@@ -950,9 +1090,54 @@ oof_pred_named <- oof_pred %>%
 group1 <- c("Number of Injuries", "Missed Games Per Injury", "Aggregate Loss (Games)")
 group2 <- c("Value per game ($)", "Aggregate Loss ($)")
 
-
 p1 <- make_severity_plot(oof_pred_named, group1, ncol = 3)
 p2 <- make_severity_plot(oof_pred_named, group2, ncol = 2)
+
+# Adjustments ---------------- 
+# Put p2’s y-axis in millions (override helper’s y-scale)
+p2 <- p2 +
+  scale_y_log10(
+    breaks = c(1e5, 1e6, 1e7, 1e8),
+    labels = scales::label_number(scale = 1e-6, suffix = "M", accuracy = 0.1)
+  ) +
+  labs(y = "Expected Values (Millions)")
+
+# Replace the title
+#p2 <- p2 + labs(title = "Distribution of Expected Financial Losses by Player Position")
+p1 <- p1 + labs(title = "")
+p2 <- p2 + labs(title = "")
+
+# (Optional) Times New Roman + theme_bw like before
+tnr_theme <- theme(
+  text         = element_text(family = "Times New Roman"),
+  axis.title.x = element_text(size = 9),
+  axis.title.y = element_text(size = 9),
+  axis.text.x  = element_text(size = 9),
+  axis.text.y  = element_text(size = 9),
+  strip.text   = element_text(size = 9),
+  legend.text  = element_text(size = 8)
+)
+
+p1 <- p1 + theme_bw() + tnr_theme
+p2 <- p2 + theme_bw() + tnr_theme
+
+# show them---------------- 
+print(p1)
+print(p2)
+
+# Side-by-side layout (A = p1, B = p2)
+combined_p12 <- plot_grid(
+  p1, p2,
+  #labels     = c("A", "B"),  # remove if you don't want panel tags
+  label_size = 12,
+  ncol       = 2,
+  align      = "h",
+  axis       = "tb",         # keep top/bottom axes aligned
+  rel_widths = c(1, 1)       # tweak if one panel should be wider
+)
+
+# Show it
+print(combined_p12)
 
 # Put p2’s y-axis in millions (override helper’s y-scale)
 p2 <- p2 +
@@ -963,7 +1148,8 @@ p2 <- p2 +
   labs(y = "Expected Values (Millions)")
 
 # Replace the title
-p2 <- p2 + labs(title = "Distribution of Expected Financial Losses by Player Position")
+p2 <- p2 + labs(title = "")
+p1 <- p1 + labs(title = "")
 
 # (Optional) Times New Roman + theme_bw like before
 tnr_theme <- theme(
@@ -981,6 +1167,32 @@ p2 <- p2 + theme_bw() + tnr_theme
 
 print(p1)
 print(p2)
+
+# Side-by-side layout (A = p1, B = p2)
+combined_p12 <- plot_grid(
+  p1, p2,
+  #labels     = c("A", "B"),  # remove if you don't want panel tags
+  label_size = 12,
+  ncol       = 2,
+  align      = "h",
+  axis       = "tb",         # keep top/bottom axes aligned
+  rel_widths = c(1, 1)       # tweak if one panel should be wider
+)
+
+# Show it
+print(combined_p12)
+
+# Save at 12" x 4" (each panel ~6" x 4")
+# ggsave(
+#   filename = "figure6_combined.png",  # or .png
+#   plot     = combined_p12,
+#   width    = 12,
+#   height   = 4,
+#   units    = "in",
+#   dpi      = 300
+# )
+
+ggsave("figure6_combined.pdf", combined_p12, width = 12, height = 4, device = cairo_pdf, bg = "white")
 
 # ------------------------------------------------------------
 # Sensitivity: 10% reduction in minutes-related covariates
@@ -1099,7 +1311,6 @@ sens_A <- sens_base %>%
   dplyr::left_join(sens_C_min, by = "Player") %>%
   dplyr::mutate(S_A = I_min * M_min * C_min) %>%
   dplyr::select(Player, S_A)
-
 
 # ------------------------------------------------------------
 # Scenario B: Travel -10%
@@ -1289,11 +1500,9 @@ sens_S_all %>%
   dplyr::arrange(Player, scenario) %>%
   dplyr::select(Player, scenario, S, dS_pct)
 
-
 # ------------------------------------------------------------
 # table 5- Sensitivity table for top-10 players
 # ------------------------------------------------------------
-
 
 # Convert S to millions and reshape wide
 sens_table <- sens_S_all %>%
@@ -1331,7 +1540,6 @@ sens_table <- sens_S_all %>%
   arrange(desc(Base))
 
 (sens_table<-sens_table[,-6])
-
 
 digits_vec <- c(
   Base             = 2,
@@ -1393,3 +1601,113 @@ gg_sens_S <- ggplot(
 
 print(gg_sens_S)
 
+# ------------------------------------------------------------
+# 0) Baseline components (ALL players) for the paper
+# ------------------------------------------------------------
+
+# Baseline E[I] (already in pred_I_df$E_I)
+base_I_all <- pred_I_df %>%
+  transmute(PLAYER, I_base = E_I)
+
+# Baseline E[M]  per player
+base_M_all <- player_severity %>%
+  transmute(PLAYER, M_base = E_M_mean)   
+
+# Baseline E[C]  per player
+base_C_all <- player_severity_gam %>%
+  transmute(PLAYER, C_base = E_C_mean)
+
+# Baseline E[S] per player
+base_all <- base_I_all %>%
+  left_join(base_M_all, by="PLAYER") %>%
+  left_join(base_C_all, by="PLAYER") %>%
+  mutate(S_base = I_base * M_base * C_base)
+
+# ------------------------------------------------------------
+# 1) Scenario: uniform minutes cut of 10% for ALL players
+# ------------------------------------------------------------
+
+# ---- I model: avg_perc_min reduced by 10%
+pred_I_df_min_all <- pred_I_df %>%
+  mutate(avg_perc_min = avg_perc_min * 0.9)
+
+pred_I_df_min_all$I_min <- predict(mod_I_final, newdata = pred_I_df_min_all, type = "response")
+
+sens_I_all <- pred_I_df_min_all %>%
+  transmute(PLAYER, I_min)
+
+# ---- M model: reduce minutes/workload proxies used in the fitted model
+pred_Mjk_df_min_all <- pred_Mjk_df %>%
+  mutate(
+    PERCENTAGE_MIN_prior = PERCENTAGE_MIN_prior * 0.9
+  )
+
+pred_Mjk_df_min_all$pred_M_min <- predict(
+  mod_M_final,
+  newdata = pred_Mjk_df_min_all,
+  type = "response",
+  allow.new.levels = TRUE
+)
+
+# Aggregate to player-level E[M] under scenario (
+player_M_min <- pred_Mjk_df_min_all %>%
+  group_by(PLAYER) %>%
+  summarise(M_min = mean(pred_M_min, na.rm = TRUE), .groups = "drop")
+
+sens_M_all <- player_M_min %>%
+  transmute(PLAYER, M_min)
+
+# ---- C model : reduce avg_perc_min by 10%
+pred_Cjl_df_min_all <- pred_Cjl_df %>%
+  mutate(PERCENTAGE_MIN_prior = PERCENTAGE_MIN_prior * 0.9)
+
+pred_Cjl_df_min_all$pred_C_min <- predict(mod_C_final_gam, newdata = pred_Cjl_df_min_all, type = "response")
+
+# Aggregate to player-level E[C] under scenario
+player_C_min <- pred_Cjl_df_min_all %>%
+  group_by(PLAYER) %>%
+  summarise(C_min = mean(pred_C_min, na.rm = TRUE), .groups = "drop")
+
+sens_C_all <- player_C_min %>%
+  transmute(PLAYER, C_min)
+
+# ------------------------------------------------------------
+# 2) Compute scenario E[S] and total savings
+# ------------------------------------------------------------
+sens_all <- base_all %>%
+  left_join(sens_I_all, by="PLAYER") %>%
+  left_join(sens_M_all, by="PLAYER") %>%
+  left_join(sens_C_all, by="PLAYER") %>%
+  mutate(
+    S_min = I_min * M_min * C_min,
+    savings = S_base - S_min
+  )
+
+# Total expected claims savings for the entire pool
+total_savings <- sum(sens_all$savings, na.rm = TRUE)
+
+total_savings
+
+###############
+#Pool totals (baseline vs scenario vs savings)
+pool_totals <- sens_all %>%
+  summarise(
+    total_S_base = sum(S_base, na.rm=TRUE),
+    total_S_min  = sum(S_min,  na.rm=TRUE),
+    total_savings= sum(savings, na.rm=TRUE),
+    pct_savings  = 100 * total_savings / total_S_base
+  )
+pool_totals
+
+########################
+#Split savings: top-10 vs rest of league
+sens_all %>%
+  mutate(group = if_else(PLAYER %in% players_10, "Top-10", "Others")) %>%
+  group_by(group) %>%
+  summarise(
+    total_S_base = sum(S_base, na.rm=TRUE),
+    total_S_min  = sum(S_min,  na.rm=TRUE),
+    total_savings= sum(savings, na.rm=TRUE),
+    pct_savings  = 100 * total_savings / total_S_base,
+    .groups="drop"
+  )
