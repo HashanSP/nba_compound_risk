@@ -1,7 +1,7 @@
 # Introduction
 
 This repository is intended as an online supplement to the abstract:
-Injury Risk Management in the National Basketball Association: An Actuarial Approach
+**Injury Risk Management in the National Basketball Association: An Actuarial Approach**
 
 Please attribute any citations of this repository to the original manuscript.
 
