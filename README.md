@@ -13,5 +13,5 @@ This repository includes:
 
 - **illustrative_figures** Figures included in the manuscript
 
-- **team logos** Logos used to create some figures in the manuscript
+- **teams** Team logos used to create some figures in the manuscript with team abbreviations and IDs.
 
