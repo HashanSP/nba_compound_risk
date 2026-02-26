@@ -1,11 +1,15 @@
 # Introduction
 
 This repository is intended as an online supplement to the abstract:
-Modeling Player Injuries in the National Basketball Association: An Actuarial Approach
+Injury Risk Management in the National Basketball Association: An Actuarial Approach
+
+Please attribute any citations of this repository to the original manuscript.
 
 This repository includes:
 
 - **clean_data** Cleaned data used to generate all results in the reference manuscript.
 
 - **code** Replication code to reproduce all results, figures, and tables in the reference manuscript (use output_for_abstract.R). Other scripts represent R functions used throughout.
+
+- 
 
