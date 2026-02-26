@@ -11,5 +11,7 @@ This repository includes:
 
 - **code** Replication code to reproduce all results, figures, and tables in the reference manuscript (use output_for_abstract.R). Other scripts represent R functions used throughout.
 
-- 
+- **illustrative_figures** Figures included in the manuscript
+
+- **team logos** Logos used to create some figures in the manuscript
 
