@@ -27,6 +27,6 @@ Himchan Jeong
 - [Website](https://ssauljin.github.io/hjeong/)
 
 Hashan Peiris
-- {Website](https://www.researchgate.net/profile/Hashan-Peiris-3?ev=hdr_xprf)
+- [Website](https://www.researchgate.net/profile/Hashan-Peiris-3?ev=hdr_xprf)
 
 
