@@ -16,17 +16,17 @@ This repository includes:
 - **teams** Team logos used to create some figures in the manuscript with team abbreviations and IDs.
 
 
-# Lead, Corresponding Author
-
-Jackson P. Lautier
-- [Website](https://jacksonlautier.com/)
-
 # Complete Authors
+
+Hashan Peiris (Lead author)
+- [Website](https://www.researchgate.net/profile/Hashan-Peiris-3?ev=hdr_xprf)
+
+Jackson P. Lautier (Corresponding Author)
+- [Website](https://jacksonlautier.com/)
 
 Himchan Jeong
 - [Website](https://ssauljin.github.io/hjeong/)
 
-Hashan Peiris
-- [Website](https://www.researchgate.net/profile/Hashan-Peiris-3?ev=hdr_xprf)
+
 
 
