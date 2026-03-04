@@ -18,7 +18,7 @@ This repository includes:
 
 # Complete Authors
 
-Hashan Peiris (Lead author)
+Hashan Peiris (Lead Author)
 - [Website](https://www.researchgate.net/profile/Hashan-Peiris-3?ev=hdr_xprf)
 
 Jackson P. Lautier (Corresponding Author)
