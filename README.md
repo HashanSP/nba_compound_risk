@@ -16,15 +16,17 @@ This repository includes:
 
 # Complete Authors
 
-Hashan Peiris (Lead Author)
+Hashan Peiris (Corresponding Author)
 
 * [Website](https://www.researchgate.net/profile/Hashan-Peiris-3?ev=hdr_xprf)
-
-Jackson P. Lautier (Corresponding Author)
-
-* [Website](https://jacksonlautier.com/)
 
 Himchan Jeong
 
 * [Website](https://ssauljin.github.io/hjeong/)
+
+Jackson P. Lautier
+
+* [Website](https://jacksonlautier.com/)
+
+
 
